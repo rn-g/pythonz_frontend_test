@@ -1,0 +1,88 @@
+{% extends "_base.html" %}
+{% load thumbs sitetree siteblocks etc_misc static %}
+{% get_static_prefix as STATIC_URL %}
+
+
+{% block head %}
+    {{ block.super }}
+    {% include "sub_vk_head.html" %}
+{% endblock %}
+
+
+{% block page_description %}{{ item.get_short_description }}{% endblock %}
+
+
+{% block page_keywords %}{{ realm.view_listing_keywords }}{% endblock %}
+
+
+{% block meta_og %}
+    <meta property="og:description" content="{{ item.get_short_description }}" />
+    {% if item.cover %}
+        <meta property="og:image" content="{% site_url %}{% thumbs_get_thumb_url item.cover 180 236 item.realm %}" />
+    {% else %}
+        <meta property="og:image" content="{% site_url %}{{ STATIC_URL }}img/realm_logos/pythonz_{{ item.realm.name_plural }}.png" />
+    {% endif %}
+{% endblock %}
+
+
+{% block page_contents %}
+    <div class="row">
+        <div class="{% block details_main_col %}col-md-9{% endblock %}" itemscope itemtype="http://schema.org/{% block schema_type %}WebPage{% endblock %}">
+
+            {% block breadcrumbs %}
+            {% sitetree_breadcrumbs from "main" template "sitetree/crumbs.html" %}
+            {% endblock %}
+
+            <div>{% include "sub_box_controls.html" %}</div>
+
+            {% include "sub_title_block.html" with hide_breadcurmbs=1 %}
+
+            {% block details_contents %}{% endblock %}
+            {% block details_description %}<div class="marg__b_mid" itemprop="description">{{ item.description|urlize|linebreaksbr }}</div>{% endblock %}
+            {% block details_contents_add %}{% endblock %}
+
+            {% include "sub_linked.html" %}
+
+            {% block details_author %}
+            <div class="marg__t_mid text-muted pull-right">
+                {% include "sub_author_editor.html" %}
+            </div>
+            {% endblock %}
+
+            {% block details_contents_after %}{% endblock %}
+            {% block details_share %}{% include "sub_box_share.html" %}{% endblock %}
+            <div class="clearfix"></div>
+
+            {% block details_discussions_pre %}{% endblock %}
+            {% if item.has_discussions %}
+                <div class="marg__t_max clearfix">
+                    <hr>
+                    {% include "sub_comments.html" with disable_disqus=1 %}
+                </div>
+            {% endif %}
+        </div>
+
+        {% block column_right%}
+            <div class="col-md-3">
+                {% block column_right_contents %}
+                <div class="text-center hidden-xs">
+                    <div class="block marg__b_mid">
+                        {% block cover %}
+                            <div class="cover_img">
+                                {% thumbs_get_thumb_url item.cover 180 236 item.realm as thumb_url %}
+                                {% if thumb_url %}
+                                <img src="{{ thumb_url }}" class="img-thumbnail" alt="{{ item.title }}">
+                                {% else %}
+                                    <i class="img-thumbnail icon_entity fa fa-3x fa-{{ realm.icon }}"></i>
+                                {% endif %}
+                            </div>
+                        {% endblock %}
+                    </div>
+                </div>
+                {% block column_controls %}{% include "sub_column_controls.html" %}{% endblock %}
+                {% endblock %}
+            </div>
+        {% endblock %}
+
+    </div>
+{%  endblock %}

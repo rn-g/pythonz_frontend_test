@@ -1,0 +1,9 @@
+{
+  "browser": "firefox",
+  "base_url": "http://127.0.0.1:8000",
+  "superuser": {
+    "username": "root",
+    "password": "123456"
+  },
+  "db_path": "../pythonz/data/db/data.db"
+}

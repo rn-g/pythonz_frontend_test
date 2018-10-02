@@ -1,0 +1,185 @@
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a data-toggle="tab" href="#rst_src"><i class="fa fa-fw fa-pencil-square-o"></i>Редактирование</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#rst_preview" id="preview_rst" class="xross"
+           data-xevent="click" data-xmethod="POST" data-xtarget="rst_preview" data-xform="edit_form">
+            <i class="fa fa-fw fa-eye"></i>Предпросмотр
+        </a>
+    </li>
+    <li>
+        <a data-toggle="modal" data-target="#help_dialog"><i class="fa fa-fw fa-question-circle-o"></i>Справка</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div id="rst_src" class="marg__t_min tab-pane fade in active">
+        <textarea{0}>{1}</textarea>
+    </div>
+    <div id="rst_preview" class="marg__t_min tab-pane fade"></div>
+</div>
+
+<div class="modal fade" id="help_dialog" tabindex="-1" role="dialog" aria-labelledby="help_dialog_label">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <h4 class="modal-title" id="help_dialog_label"><i class="fa fa-fw fa-question-circle-o"></i>Справка по
+                    форматированию</h4>
+            </div>
+            <div class="modal-body">
+
+                <table class="table table-striped">
+                    <tr>
+                        <td><strong>Строки</strong></td>
+                        <td>Перевод строки трактуется как начало нового параграфа.</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Ссылки</strong></td>
+                        <td>
+                            Ссылки на внешние ресурсы, начинающиеся с <i>http</i> форматируются автоматически.<br>
+                            Можно скрыть ссылку под именем, используя следующий код.<br><br>
+                            <pre><code class="nohighlight">Вставка ссылки `под именем&lt;http://pythonz.net/&gt;`_.</code></pre>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Начертание</strong></td>
+                        <td>
+                            Для выделения слова или фразы <b>полужирным</b> используйте обрамление в двойные звёзды.<br><br>
+                            <pre><code class="nohighlight">Выделение **полужирным**.</code></pre>
+
+                            Для выделения слова или фразы <i>курсивом</i> используйте обрамление в звёзды.<br><br>
+                            <pre><code class="nohighlight">Выделение *курсивом*.</code></pre>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Акцентирование</strong></td>
+                        <td>
+                            Слово или фразу можно <code>акцентировать</code> путём обрамления в двойные
+                            апострофы.<br><br>
+                            <pre><code class="nohighlight">Выделение ``акцентом``.</code></pre>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td nowrap><strong>Подзаголовок</strong></td>
+                        <td>
+                            Подзаголовок  можно создать при помощи директивы <code>.. title::</code>.<br><br>
+                            <pre><code class="nohighlight">.. title:: Подзаголовок</code></pre>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td nowrap><strong>Блок «На заметку»</strong></td>
+                        <td>
+                            Блок можно выделить визуально, если начать строку с помощью
+                            директивы <code>.. note::</code>.<br><br>
+                            <pre><code class="nohighlight">.. note:: Текст заметки.</code></pre>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Блок «Внимание»</strong></td>
+                        <td>
+                            Блок можно выделить визуально, если начать строку с помощью
+                            директивы <code>.. warning::</code>.<br><br>
+                            <pre><code class="nohighlight">.. warning:: Текст предупреждения.</code></pre>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Таблицы</strong></td>
+                        <td>
+                            С помощью директивы <code>.. table::</code> можно вставлять таблицы. Каждая строка при этом
+                            станет рядом. Строка, начинающаяся с восклицательного знака станет заголовком, а ячейки
+                            разделяются вертикальной чертой |.<br><br>
+                            <pre><code class="nohighlight">
+.. table::
+
+! заголовок | заголовок 2 | заголовок 3
+1 | первый ряд | текст 1
+2 | второй ряд | текст 2
+
+
+                            </code></pre>
+                            <i>Обратите внимание на необходимость наличия двойного переноса строки после блока таблицы.</i>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Цитаты</strong></td>
+                        <td>
+                            <blockquote>
+                            Для оформления цитаты, обрамите её в тройные апострофы.
+                            </blockquote>
+                            <pre><code class="nohighlight">```
+Это цитата.
+```</code></pre>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Исходный код</strong></td>
+                        <td>
+                            Подсветка синтаксиса реализуется путём выделения кода в отдельный параграф,
+                            начинающийся с директивы <code>.. code:: имя_языка</code>.<br><br>
+
+                            <pre><code class="nohighlight">Некий текст.
+
+.. code:: python
+
+def my_function():
+    "just a test"
+    print 8/2
+
+
+И снова текст.</code></pre>
+                            <i>Обратите внимание на необходимость наличия двойного переноса строки после блока кода.</i><br>
+                            <i>Упоминание языка не обязательно. Если он не указан, используется подсветка Python.</i>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Gist от GitHub</strong></td>
+                        <td>
+                            Гисты (куски исходного кода) могут быть вставлены в текст при помощи директивы
+                            <br><code>.. gist:: гитхаб_логин/ид_гиста</code>.<br><br>
+                            <pre><code class="nohighlight">.. gist:: idlesign/c1255817bb0234d9971a</code></pre>
+                            <i>Обратите внимание на необходимость наличия переноса строки после блока кода.</i><br>
+                            <i>Гисты можно создавать по адресу
+                                <a href="https://gist.github.com/" target="_blank">https://gist.github.com/</a></i>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Опрос от polldaddy</strong></td>
+                        <td>
+                            Виджет опроса вставляется при помощи директивы
+                            <br><code>.. poll:: ид_опроса</code>.<br><br>
+                            <pre><code class="nohighlight">.. poll:: 1234567</code></pre>
+                            <i>Обратите внимание на необходимость наличия переноса строки после блока кода.</i>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Подкаст с podster.fm</strong></td>
+                        <td>
+                            Встроить проигрыватель можно при помощи директивы
+                            <br><code>.. podster:: url_страницы_подкаста</code>.<br><br>
+                            <pre><code class="nohighlight">.. podster:: http://mtpod.podster.fm/5</code></pre>
+                            <i>Обратите внимание на необходимость наличия переноса строки после блока кода.</i>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

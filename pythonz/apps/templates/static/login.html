@@ -1,0 +1,23 @@
+{% extends "static/_base.html" %}
+{% load sitegate %}
+
+
+{% block page_title %}{{ block.super }}Вход и Регистрация{% endblock %}
+
+
+{% block heading_wrap %}{% endblock %}
+
+
+{% block body %}
+    <div class="row marg__b_max">
+        <div class="col-md-6">
+            <div class="page-header"><h2>Вход</h2></div>
+            {% sitegate_signin_form %}
+        </div>
+
+        <div class="col-md-6">
+            <div class="page-header"><h2>Регистрация</h2></div>
+            {% sitegate_signup_form %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "_base.html" %}
+
+{% block page_description %}{% endblock %}
+{% block page_title %}Про Python - {% endblock %}
+
+
+{% block page_contents %}
+
+    {% block heading_wrap %}
+    <div class="page-header">
+        <h1>{% block heading %}{% endblock %}</h1>
+    </div>
+    {% endblock %}
+
+    <div class="section">
+
+        <div class="col-md-8">
+            {% block body %}{% endblock %}
+        </div>
+
+        <div class="col-md-4">
+            {% block ads %}
+                {% include "sub_box_ads.html" with area="rightbar" %}
+            {% endblock %}
+        </div>
+
+    </div>
+
+    <div class="clearfix"></div>
+
+    {% block zen %}{% include "sub_zen.html" %}{% endblock %}
+
+{%  endblock %}

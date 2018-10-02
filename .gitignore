@@ -1,0 +1,11 @@
+.project
+.pydevproject
+.idea
+.tox
+.cache
+.pytest_cache
+.eggs
+__pycache__
+/pythonz/data/media/
+/pythonz/data/db/
+/pythonz/settings/settings_production.py

@@ -1,0 +1,51 @@
+{% extends "base_listing.html" %}
+
+{% block bar_right %}
+
+    <div class="panel panel-success marg__t_mid">
+        <div class="panel-heading">
+            <h5 class="panel-title">Как добавить вакансию</h5>
+        </div>
+        <div class="panel-body">
+        Вы можете опубликовать вакансию на <a href="https://novosibirsk.hh.ru/auth/employer">hh.ru</a>,
+            и, если она имеет отношение к Питону, мы покажем её здесь автоматически.
+        </div>
+    </div>
+
+    <div>
+        <h2>Статистика
+        <sup class="small mod__has_tooltip" title="Собрана по данным вакансий, актуальных на текущий момент">
+            <i class="fa fa-question-circle"></i>
+        </sup>
+        </h2><hr>
+    </div>
+
+    <div class="marg__b_mid">
+
+        {% include "realms/vacancies/stats_salary.html" %}
+
+        {% if stats_places %}
+            <h4 class="marg__l_min">Места</h4>
+            <table class="table">
+                <tbody>
+                    {% for stat_row in stats_places %}
+                    <tr>
+                        <td>
+                            {% if stat_row.is_published %}
+                            <a href="{{ stat_row.get_absolute_url }}">{{ stat_row.title }}</a>
+                            {% else %}
+                            {{ stat_row.title }}
+                            {% endif %}
+                        </td>
+                        <td>{{ stat_row.vacancies_count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        <div class="clearfix"></div>
+    </div>
+
+
+{% endblock %}

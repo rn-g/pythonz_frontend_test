@@ -1,0 +1,156 @@
+{% extends "base_details.html" %}
+{% load model_field sitetree static %}
+{% get_static_prefix as STATIC_URL %}
+
+
+{% block page_description %}Описание {{ reference.title }} в Python. {{ reference.description|truncatechars:"135" }}{% endblock %}
+
+
+{% block page_keywords %}{{ block.super }}, {{ reference.title }} in python 3, {{ reference.title }} в питоне, {{ reference.search_terms }}{% endblock %}
+
+
+{% block js_bottom %}
+    <script type="text/javascript">
+        $(function(){
+            pythonz.Reference.decorateDescription('area_description');
+            pythonz.Reference.decorateFuncParams('area_func_params');
+            pythonz.Reference.decorateFuncResult('area_func_result');
+        });
+    </script>
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {% sitetree_breadcrumbs from "references" template "sitetree/crumbs.html" %}
+{% endblock %}
+
+
+{% block column_right_contents %}
+
+    {% if request.user.is_authenticated %}
+    <div class="well well-sm">
+        <div class="marg__b_min">Дополнить справочник:</div>
+        <div>
+            {% include "realms/references/quick_add_form.html" with parent=reference.parent_id title='Добавить по соседству' %}
+            {% include "realms/references/quick_add_form.html" with parent=reference.id title='Добавить вложенно' %}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    {% endif %}
+
+    {% include "sub_column_controls.html" with hide_hint=1 %}
+
+    <div id="ref_links">
+
+        {% if children and not reference.is_type_bundle %}
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h5 class="panel-title">{{ reference.title }}</h5>
+            </div>
+            {% include "realms/references/sub_list.html" with items=children %}
+        </div>
+        {% endif %}
+
+        {% if reference.parent %}
+            {% if siblings %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 class="panel-title">
+                        <a href="{% url "references:details_slug" reference.parent.slug %}">{{ reference.parent.title }}</a>
+                    </h5>
+                </div>
+                {% include "realms/references/sub_list.html" with items=siblings %}
+            </div>
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+
+
+{% block schema_type %}APIReference{% endblock %}
+
+
+{% block details_contents %}
+    <meta itemprop="headline" content="{{ reference.title }}" />
+    <meta itemprop="datePublished" content="{{ reference.time_published|date:"c" }}" />
+    <meta itemprop="image" content="{{ STATIC_URL }}img/realm_logos/pythonz_references.png" />
+
+    <div class="marg__b_mid pull-right">
+        {% if reference.pep %}
+            <div class="label label-primary marg__r_min">
+                <a href="/peps/named/{{ reference.pep|stringformat:"04d" }}/" title="Перейти к связанному предложению по улучшению">
+                    {% model_field_verbose_name from reference.pep %}-{{ reference.pep }}</a></div>
+        {% endif %}
+        {% if reference.version_added %}
+        <div class="label label-info marg__r_min">
+            <a href="{{ reference.version_added.get_absolute_url }}">{% model_field_verbose_name from reference.version_added %} {{ reference.version_added }}</a>
+        </div>
+        {% endif %}
+        {% if reference.version_deprecated %}
+        <div class="label label-danger">
+            <a href="{{ reference.version_deprecated.get_absolute_url }}">{% model_field_verbose_name from reference.version_deprecated %} {{ reference.version_deprecated }}</a>
+        </div>
+        {% endif %}
+    </div>
+
+{%  endblock %}
+
+
+{% block details_contents_add %}
+
+    {% if reference.is_type_callable %}
+        <div class="marg__b_mid">
+
+            {% if reference.func_proto %}
+            <div class="marg__b_mid well well-sm">
+                <div id="area_func_proto" class="block">
+                    {{ reference.func_proto }}
+                </div>
+                {% if reference.func_result %} -> <span id="area_func_result">{{ reference.func_result }}</span>{% endif %}
+            </div>
+            {% endif %}
+
+            {% if reference.func_params %}
+            <div class="marg__b_mid">
+                <div id="area_func_params">
+                    {{ reference.func_params|linebreaksbr }}
+                </div>
+            </div>
+            {% endif %}
+
+        <hr>
+        </div>
+    {% endif %}
+
+    <div id="area_description">
+        {{ reference.text|safe }}
+    </div>
+
+    {% if reference.search_terms %}
+    <div class="marg__t_mid small cl__gray">
+        Синонимы поиска: {{ reference.search_terms }}
+    </div>
+    {% endif %}
+
+
+    {% if children and reference.is_type_bundle %}
+    <h6 class="marg__t_mid">Статьи раздела</h6>
+    {% include "realms/references/sub_list.html" with items=children detailed=True %}
+    {% endif %}
+
+{% endblock %}
+
+{% block details_author %}
+    <div class="pull-left">
+        {% include "sub_box_share.html" %}
+    </div>
+    {{ block.super }}
+{% endblock %}
+
+
+{% block details_share %}{% endblock %}
+
+
+{% block cover %}{% endblock %}

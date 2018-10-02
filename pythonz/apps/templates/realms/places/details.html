@@ -1,0 +1,95 @@
+{% extends "base_details.html" %}
+{% load sitecats %}
+
+
+{% block page_description %}Python в городе {{ place.title }}{% endblock %}
+
+
+{% block page_keywords %}{{ block.super }}, питон в {{ place.title }}{% endblock %}
+
+
+{% block head %}
+    {{ block.super }}
+    <script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+{% endblock %}
+
+
+{% block schema_type %}AdministrativeArea{% endblock %}
+
+
+{% block cover %}
+    <div id="cover_map" style="width: 260px; height: 300px;"></div>
+    <script type="text/javascript">
+        ymaps.ready(function() {
+            var pos = [{{ item.geo_pos }}],
+                title = '{{ item.title }}',
+                coverMap = new ymaps.Map('cover_map', {center: pos, zoom: 2, controls: []}),
+                placeMark = new ymaps.Placemark(pos, {iconContent: title}, {preset: 'islands#darkBlueStretchyIcon'});
+            coverMap.geoObjects.add(placeMark);
+        });
+    </script>
+{% endblock %}
+
+
+{% block details_contents %}
+
+    {% if allow_im_here %}
+        <div id="im_here_box" class="marg__b_mid">
+            <button id="set_im_here" data-xtarget="im_here_box" data-xsuccess="remove" class="xross btn btn-warning" title="Нажмите, если находитесь в этом месте.">Я здесь!</button>
+        </div>
+    {% endif %}
+
+    {{ block.super }}
+{% endblock %}
+
+
+{% block column_controls %}
+    {% if stats_salary %}
+    <div class="panel panel-default small">
+        {% include "realms/vacancies/stats_salary.html" %}
+    </div>
+    {% endif %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block details_contents_after %}
+
+<div class="panel panel-default panel-body">
+    <ul class="nav nav-tabs marg__b_mid" role="tablist" id="realms_tabs">
+        {% if vacancies %}<li role="presentation">
+            <a href="#vacancies" aria-controls="vacancies" role="tab" data-toggle="tab">Вакансии</a>
+        </li>{% endif %}
+
+        {% if events %}<li role="presentation">
+            <a href="#events" aria-controls="events" role="tab" data-toggle="tab">События</a>
+        </li>{% endif %}
+
+        {% if users %}<li role="presentation">
+            <a href="#users" aria-controls="users" role="tab" data-toggle="tab">Пользователи</a>
+        </li>{% endif %}
+
+        {% if communities %}<li role="presentation">
+            <a href="#communities" aria-controls="communities" role="tab" data-toggle="tab">Сообщества</a>
+        </li>{% endif %}
+
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="vacancies">{% include "realms/places/sub_realm_links.html" with items=vacancies %}</div>
+        <div role="tabpanel" class="tab-pane active" id="users">{% include "realms/places/sub_realm_links.html" with items=users %}</div>
+        <div role="tabpanel" class="tab-pane active" id="communities">{% include "realms/places/sub_realm_links.html" with items=communities %}</div>
+        <div role="tabpanel" class="tab-pane active" id="events">{% include "realms/places/sub_realm_links.html" with items=events %}</div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js_bottom %}
+
+    <script type="text/javascript">
+        $(function() {
+            $('#realms_tabs a:first').tab('show');
+        });
+    </script>
+
+{% endblock %}

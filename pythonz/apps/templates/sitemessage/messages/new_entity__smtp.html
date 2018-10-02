@@ -1,0 +1,7 @@
+{% extends "sitemessage/messages/base.html" %}
+{% load etc_misc %}
+
+
+{% block contents %}
+    <p>Новое на сайте: <a href="{% site_url %}{{ entity_url }}">{{ entity_title }}</a>.</p>
+{% endblock %}

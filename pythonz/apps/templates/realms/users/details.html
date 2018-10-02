@@ -1,0 +1,172 @@
+{% extends "base_details.html" %}
+{% load gravatar sitetree model_field cache %}
+
+
+{% block page_description %}Профиль питониста «{{ user.title }}»{% endblock %}
+
+
+{% block page_keywords %}{{ block.super }}, питонист {{ user.title }}{% endblock %}
+
+
+{% block meta_og %}
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="{{ user.get_display_name }}" />
+    <meta property="og:first_name" content="{{ user.first_name }}" />
+    <meta property="og:last_name" content="{{ user.last_name }}" />
+    <meta property="og:username" content="{{ user.get_username_partial }}" />
+
+    <meta property="og:description" content="{% sitetree_page_description from "main" %}" />
+    <meta property="og:image" content="{% gravatar_get_url user 180 %}" />
+{% endblock %}
+
+
+{% block schema_type %}Person{% endblock %}
+
+
+{% block details_contents %}
+    <h4><i class="fa fa-fw fa-user-circle-o"></i> Общая информация</h4>
+    <div class="marg__b_mid text-muted marg__l_mid">
+        <table class="small" width="40%">
+            <tr>
+                <td width="45%">{% model_field_verbose_name from user.username %}:</td>
+                <td>{{ user.get_username_partial }}</td>
+            </tr>
+            <tr>
+                <td>{% model_field_verbose_name from user.date_joined %}:</td>
+                <td>{{ user.date_joined }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    &nbsp;
+                </td>
+            </tr>
+            {% if user.place %}
+                <tr>
+                    <td>{% model_field_verbose_name from user.place %}:</td>
+                    <td><a href="{{ user.place.get_absolute_url }}">{{ user.place.title }}</a></td>
+                </tr>
+            {% endif %}
+            {% if user.email_public %}
+                <tr>
+                    <td>{% model_field_verbose_name from user.email_public %}:</td>
+                    <td><a href="mailto:{{ user.email_public }}">{{ user.email_public }}</a></td>
+                </tr>
+            {% endif %}
+            {% if user.url %}
+                <tr>
+                    <td>{% model_field_verbose_name from user.url %}:</td>
+                    <td><a href="{{ user.get_utm_url }}">{{ user.url }}</a></td>
+                </tr>
+            {% endif %}
+            {% if user.twitter %}
+                <tr>
+                    <td>{% model_field_verbose_name from user.twitter %}:</td>
+                    <td><a href="https://twitter.com/{{ user.twitter }}">{{ user.twitter }}</a></td>
+                </tr>
+            {% endif %}
+            {% if user.person %}
+            <tr>
+                <td colspan="2">
+                    <div class="marg__t_mid">
+                        <a href="{{ user.person.get_absolute_url  }}" class="btn btn-primary btn-sm">
+                            {{ user.get_display_name }} в разделе &laquo;Персоны&raquo; &hellip;
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+
+
+{% cache 300 user_stats user.pk %}
+    {% if stats %}
+    <div class="marg__t_max">
+        <hr>
+        <h4><i class="fa fa-fw fa-share-alt"></i> Вклад в сообщество
+            <sup class="small mod__has_tooltip" title="Статистика по материалам, размещенным пользователем на нашем сайте"><i class="fa fa-info-circle"></i></sup>
+        </h4>
+        <div class="marg__b_mid text-muted marg__l_mid">
+            <table class="small" width="40%">
+                {% for realm_name, stats in stats.items %}
+                    <tr>
+                        <td width="45%">{{ realm_name }}</td>
+                        <td width="10%">{{ stats.cnt_published }}</td>
+                        <td>
+                            {% if stats.cnt_postponed %}
+                                <span class="mod__has_tooltip cl__green" title="Ожидают публикации">+{{ stats.cnt_postponed }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endif %}
+{% endcache %}
+
+    {% if drafts %}
+    <div class="marg__t_max">
+        <hr>
+        <h4><i class="fa fa-fw fa-pause-circle-o"></i> Неопубликованные</h4>
+        <div class=" marg__l_mid marg__t_mid">
+            {% for realm_name, drafts in drafts.items %}
+                <h5>{{ realm_name }} <sup class="text-muted">{{ drafts|length }}</sup></h5>
+                <table class="table small text-muted">
+                {% for draft in drafts %}
+                    <tr>
+                        <td width="1%">
+                            {% if draft.is_draft %}
+                                <i class="text-muted fa fa-fw fa-flask" title="Черновик"></i>
+                            {% else %}
+                                <i class="fa fa-fw fa-hourglass-half" title="К отложенной публикации"></i>
+                            {% endif %}
+                        </td>
+                        <td width="1%" nowrap>{{ draft.time_created|date }}</td>
+                        <td><a href="{{ draft.get_absolute_url }}">{{ draft.title }}</a></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if bookmarks %}
+    <div class="marg__t_max">
+        <hr>
+        <h4><i class="fa fa-fw fa-bookmark-o"></i> Избранное</h4>
+        {% for realm_model, bookmark_list in bookmarks.items %}
+            {% if bookmark_list %}
+            <div class="marg__l_mid marg__t_mid">
+                <h5>{{ realm_model.get_verbose_name_plural }}</h5>
+                <ul>
+                    {% for item in bookmark_list %}
+                        <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+{%  endblock %}
+
+{% block details_share %}{% endblock %}
+
+{% block column_controls %}
+    {% with hide_hint=1 %}
+        {{ block.super }}
+    {% endwith %}
+
+    {% if user.twitter %}
+        <div>
+            {% include "sub_twitter_timeline.html" with username=user.twitter %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block cover %}
+    <img src="{% gravatar_get_url user 180 %}" class="img-thumbnail" alt="{{ user.get_display_name }}">
+{% endblock %}

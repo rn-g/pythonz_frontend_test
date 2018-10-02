@@ -1,0 +1,24 @@
+{% extends "realms/categories/_base.html" %}
+{% load sitecats cache %}
+
+
+{% block page_description %}Материалы, связанные с Python, в категории «{{ item.title }}». {{ item.note|truncatechars:100 }}{% endblock %}
+
+
+{% block page_keywords %}{{ block.super }}, {{ item.title }}{% endblock %}
+
+
+{% block workarea %}
+    {% if item.note %}
+        <blockquote>{{ item.note|urlize }}</blockquote>
+    {% endif %}
+
+    {% cache 3600 category_materials item.pk %}
+        {% if realms_links %}
+            {% include "sub_realms_links_tabs.html" %}
+        {% else %}
+            Пока нет материалов связанных с этой категорией.
+        {% endif %}
+    {% endcache %}
+
+{% endblock %}

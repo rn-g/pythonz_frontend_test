@@ -1,0 +1,24 @@
+{% load sitetree model_meta %}
+
+
+{% if not hide_breadcurmbs %}
+    {% sitetree_breadcrumbs from "main" template "sitetree/crumbs.html" %}
+{% endif %}
+
+
+{% if view.name == 'listing' %}
+    <span class="pull-right hidden-xs">
+    {% if realm.syndication_enabled %}
+        <a title="Подписаться на RSS раздела {% model_meta_verbose_name_plural realm.model %}" href="{{ realm.get_syndication_url }}">
+            <i class="fa fa-fw fa-rss"></i>&nbsp;RSS
+        </a> &nbsp;
+    {% endif %}
+    </span>
+{% endif %}
+
+
+{% sitetree_page_title from "main" as title %}
+<div class="page-header">
+    <h1 itemprop="name" data-geopattern="{{ title }}"><i class="fa fa-{{ realm.icon }}"></i> {{ title }}</h1>
+    <i>{% block subheader %}{{ subheader }}{% endblock %}</i>
+</div>

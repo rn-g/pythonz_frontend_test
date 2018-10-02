@@ -1,0 +1,10 @@
+{% extends "sitemessage/messages/_base.html" %}
+
+{% block footer %}
+    <hr>
+    Это письмо сформировано и выслано автоматически проектом <a href="{{ SITE_URL }}">{{ SITE_URL }}</a>, отвечать на него бесполезно.<br>
+    Отписаться от рассылки можно на сайте, в настройках вашего профиля.
+    {% if directive_mark_read %}
+        <img src="{{ directive_mark_read }}">
+    {% endif %}
+{% endblock %}

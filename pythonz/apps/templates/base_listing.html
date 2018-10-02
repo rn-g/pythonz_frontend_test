@@ -1,0 +1,92 @@
+{% extends "_base.html" %}
+{% load cache %}
+
+
+{% block page_keywords %}{{ realm.view_listing_keywords }}{% if category %}, {{ category.title }}{% endif %}{% endblock %}
+
+
+{% block page_description %}{{ realm.view_listing_description }}{% if category %}, {{ category.note|truncatechars:100 }}{% endif %}{% endblock %}
+
+
+{% block page_contents_pre %}
+
+    <div class="row">
+        <div class="col-md-12">
+            {% include "sub_title_block.html" %}
+
+        {% block promo %}
+            {% if category.note %}
+                <blockquote>{{ category.note|urlize }}</blockquote>
+            {% endif %}
+        {% endblock %}
+
+        </div>
+    </div>
+
+    <div>
+        <div class="col-md-8 container-fluid">
+
+            <div>
+                <h2>Список</h2><hr>
+            </div>
+
+            <div>
+            {% include "sub_paginator.html" with paginator=items %}
+
+{%  endblock %}
+
+
+{% block page_contents %}
+    {% include view.template_list_items %}
+{%  endblock %}
+
+
+{% block page_contents_post %}
+                {% include "sub_paginator.html" with paginator=items %}
+
+            </div>
+        </div>
+
+        <div class="col-md-4 hidden-xs container-fluid">
+
+            {% block ad_rightbar %}
+            <div class="col-md-12 marg__b_mid">
+                {% include "sub_box_ads.html" with area="rightbar" %}
+            </div>
+            <div class="clearfix"></div>
+            {% endblock %}
+
+            <div id="bar__most_voted" class="col-md-12">
+                {% block bar_right %}
+                <div>
+                    <h2>
+                        Лучшие
+                        <sup class="small mod__has_tooltip" title="По мнению пользователей сайта">
+                            <i class="fa fa-question-circle"></i>
+                        </sup>
+                    </h2><hr>
+                </div>
+
+                <div class="marg__b_mid">
+                    {% block most_voted %}
+                        {% if items_most_voted %}
+                            {% include view.template_list_items with items=items_most_voted nofade=1 %}
+                        {% else %}
+                            Пока этот список не сформирован. Оцените материалы раздела, чтобы исправить ситуацию.
+                        {% endif %}
+                    {% endblock %}
+                    <div class="clearfix"></div>
+                </div>
+                {% endblock %}
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="marg__t_mid">
+            {% block bar_right_after %}
+                {% include "sub_hint.html" %}
+            {% endblock %}
+            </div>
+        </div>
+    </div>
+
+{%  endblock %}

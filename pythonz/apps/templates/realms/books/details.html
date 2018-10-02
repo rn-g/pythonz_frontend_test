@@ -1,0 +1,64 @@
+{% extends "base_details.html" %}
+{% load goodreads model_field %}
+
+
+{% block page_keywords %}{{ block.super }}, книга {{ book.title }}, купить {{ book.title }}{% endblock %}
+
+
+{% block meta_og %}
+    <meta property="og:type" content="book" />
+    <meta property="og:title" content="{{ book.title }}" />
+    <meta property="og:author" content="{{ book.author }}" />
+    <meta property="og:release_date" content="{{ book.year }}" />
+    <meta property="og:isbn" content="{{ book.isbn|default:book.isbn_ebook }}" />
+    {{ block.super }}
+{% endblock %}
+
+
+{% block schema_type %}Book{% endblock %}
+
+
+{% block details_contents %}
+    <div class="marg__b_mid text-muted">
+        <small>
+            <span class="marg__r_mid">
+                {% model_field_verbose_name from book.author %}: {% include "sub_persons_links.html" with persons=book.authors.all %}
+            </span>
+            <span class="marg__r_mid">{% model_field_verbose_name from book.year %}: {{ book.year }}</span>
+            {% if book.isbn or book.isbn_ebook %}
+                <span>
+                    {% if book.isbn %}
+                        <span class="marg__r_mid">
+                        {% model_field_verbose_name from book.isbn %}: <span itemprop="isbn">{% goodreads_get_search_tag book.isbn %}</span>
+                        </span>
+                    {% endif %}
+                    {% if book.isbn_ebook %}
+                        <span class="marg__r_mid">
+                            {% model_field_verbose_name from book.isbn_ebook %}: <span itemprop="isbn">{% goodreads_get_search_tag book.isbn_ebook %}</span>
+                        </span>
+                    {% endif %}
+                </span>
+            {% endif %}
+            {%  if book.translator %}
+                <span class="py_user">{% model_field_verbose_name from book.translator %}: {{ book.translator }}</span>
+            {% endif %}
+        </small>
+    </div>
+{%  endblock %}
+
+
+{% block details_discussions_pre %}
+
+    <div class="marg__t_mid">
+        <hr>
+        <h4><i class="fa fa-shopping-cart"></i> &nbsp;Книга в интернет-магазинах</h4>
+        <div id="list_partner_links" class="xross">
+
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                Пока вы осматриваетесь, мы пытаемся отыскать для вас эту книгу на полках интернет-магазинов &hellip;
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

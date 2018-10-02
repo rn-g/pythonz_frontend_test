@@ -1,0 +1,39 @@
+{% extends "base_details.html" %}
+{% load model_field thumbs etc_misc %}
+
+
+{% block page_keywords %}{{ block.super }}, видео {{ video.title }}, смотреть {{ video.title }}{% endblock %}
+
+
+{% block meta_og %}
+    <meta property="og:type" content="video.other" />
+    <meta property="og:title" content="{{ video.title }}" />
+    <meta property="og:actor" content="{{ video.author }}" />
+    <meta property="og:release_date" content="{{ video.year }}" />
+    {{ block.super }}
+{% endblock %}
+
+
+{% block schema_type %}VideoObject{% endblock %}
+
+
+{% block details_contents %}
+    <meta itemprop="uploadDate" content="{{ video.time_published|date:"c" }}" />
+    <meta itemprop="thumbnailUrl" content="{% site_url %}{% thumbs_get_thumb_url video.cover 180 236 item.realm %}" />
+
+    <div id="video_box" class="well well-sm">
+        {{ video.code|safe }}
+    </div>
+
+    <div class="marg__b_mid text-muted">
+        <small>
+            <span class="marg__r_mid">
+                {% model_field_verbose_name from video.author %}: {% include "sub_persons_links.html" with persons=video.authors.all %}
+            </span>
+            <span class="marg__r_mid">{% model_field_verbose_name from video.year %}: {{ video.year }}</span>
+            {%  if video.translator %}
+                <span class="py_user">{% model_field_verbose_name from video.translator %}: {{ video.translator }}</span>
+            {% endif %}
+        </small>
+    </div>
+{%  endblock %}

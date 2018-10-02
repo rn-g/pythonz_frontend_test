@@ -1,0 +1,27 @@
+{% extends "static/_base_sitetreed.html" %}
+
+{% block body %}
+    <div class="marg__b_mid">{% include "sub_box_ads.html" with area="searchtop" %}</div>
+    <div class="marg__b_mid small">Количество результатов: {{ results_len }}</div>
+    <div class="marg__l_mid marg__b_mid" itemscope itemtype="http://schema.org/SearchResultsPage">
+        {% if results_len %}
+            <ol>
+            {% for result in results %}
+                <li>
+                    <h4><a href="{{ result.get_absolute_url }}">{{ result.title }}</a></h4>
+                    <div><i>{{ result.description }}</i></div>
+                </li>
+            {% endfor %}
+            </ol>
+        {% else %}
+            <div class="alert alert-warning" role="alert">К сожалению, ничего не найдено.</div>
+        {% endif %}
+    </div>
+    <div>{% include "sub_box_ads.html" with area="searchbottom" %}</div>
+{%  endblock %}
+
+{% block zen %}{% endblock %}
+
+{% block ads %}
+    {% include "sub_box_ads.html" with area="rightbar" type="search" %}
+{% endblock %}

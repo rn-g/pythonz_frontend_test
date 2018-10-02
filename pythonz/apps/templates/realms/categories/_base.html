@@ -1,0 +1,30 @@
+{% extends "_base.html" %}
+
+{% block page_contents %}
+    <div class="row">
+        <div class="col-md-12">
+            {% include "sub_title_block.html" %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 container-fluid">
+            {% block workarea %}{% endblock %}
+        </div>
+
+        <div class="col-md-4 hidden-xs container-fluid">
+
+            <div class="marg__t_mid">
+                {% include "sub_hint.html" %}
+            </div>
+
+            {% block ad_rightbar %}
+            <div class="col-md-12 marg__b_mid">
+                {% include "sub_box_ads.html" with area="rightbar" %}
+            </div>
+            <div class="clearfix"></div>
+            {% endblock %}
+
+        </div>
+    </div>
+{%  endblock %}

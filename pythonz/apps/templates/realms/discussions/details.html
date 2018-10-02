@@ -1,0 +1,69 @@
+{% extends "_base.html" %}
+{% load gravatar model_meta sitetree %}
+
+
+{% block page_description %}Обсуждение «{{ discussion.title }}»{% endblock %}
+
+
+{% block page_keywords %}{{ block.super }}, обсуждение {{ discussion.title }}{% endblock %}
+
+
+{% block head %}
+    {{ block.super }}
+    {% include "sub_vk_head.html" %}
+{% endblock %}
+
+
+{% block page_contents %}
+<div itemscope itemtype="http://schema.org/Comment">
+    <div class="row">
+        <div class="col-md-12">
+            {% include "sub_title_block.html" %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <meta itemprop="about" content="{{ discussion.title }}" />
+
+                <div class="pull-right marg__l_mid marg__b_mid float_panel">
+                    <div class="well marg__b_mid text-center">
+                        {% with discussion.submitter.get_absolute_url as submitter_url %}
+                        <a href="{{ submitter_url }}">{% gravatar_get_img discussion.submitter 64 %}</a><br>
+                        <small><a href="{{ submitter_url }}">{{ discussion.submitter.get_display_name }}</a></small>
+                        {% endwith %}
+                    </div>
+                    {% include "sub_box_tags.html" %}
+
+                    {% block ad_rightbar %}
+                    <div class="col-md-12 marg__b_mid">
+                        {% include "sub_box_ads.html" with area="rightbar" type="details" %}
+                    </div>
+                    <div class="clearfix"></div>
+                    {% endblock %}
+                </div>
+                <div class="marg__b_min ">
+                    {% include "sub_box_controls.html" %}
+                    <small class="text-muted">
+                        {{ discussion.time_created }}
+                        {% if discussion.time_modified %}(<abbr title="Дата последнего редактирования">ред.</abbr> {{ discussion.time_modified }}){% endif %}
+                        <div>
+                            {% if discussion.linked_object %}
+                                Навеяно объектом
+                                <a href="{{ discussion.linked_object.get_absolute_url }}">{% model_meta_verbose_name discussion.linked_object %} «{{ discussion.linked_object.title }}»</a>
+                            {% endif %}
+                        </div>
+                    </small>
+                </div>
+                <div class="py_user" itemprop="text">{{ discussion.text|safe }}</div>
+            </div>
+            {% include "sub_box_share.html" %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {% include "sub_comments.html" with disable_internal=1 author=discussion.submitter entity_name='discussion' entity_id=discussion.id personalized=1 %}
+        </div>
+    </div>
+</div>
+{%  endblock %}

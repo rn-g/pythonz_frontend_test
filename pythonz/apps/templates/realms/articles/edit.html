@@ -1,0 +1,49 @@
+{% extends "base_edit.html" %}
+
+
+{% block head %}
+    {{ block.super }}
+    <script type="text/javascript">
+
+        function toggleFormFields() {
+            var isExternal = $('#id_location').val() === '2',
+                fieldsForExternal = ['url'],
+                commonFields = ['location', 'status', 'published_by_author'];
+
+            $('.form-group', '#edit_form').each(function(idx, el){
+
+                var $el = $(el),
+                    name = $el.data('fieldname'),
+                    in_array = $.inArray(name, fieldsForExternal) > -1,
+                    show = (isExternal && in_array) || (!isExternal && !in_array);
+
+                if ($.inArray(name, commonFields) > -1) {
+                    return;
+                }
+
+                $el.hide();
+                if (show) {
+                    $el.show();
+                }
+
+            });
+        }
+
+        $(function(){
+            $('#id_location').on('change', toggleFormFields);
+            toggleFormFields();
+        });
+    </script>
+{% endblock %}
+
+{% block hint %}
+    <ol>
+        <li>Придерживатесь темы Python;</li>
+        <li>Перепост своих статей разрешен;</li>
+        <li>Перепост чужих статей запрещен;</li>
+        <li>Переводы принимаюся, имя изначального автора при этом записывается на языке оригинала, ссылка на оригинал в конце статьи настоятельно рекомендуется;</li>
+        <li>Постарайтесь писать доступным языком;</li>
+        <li>Не принебрегайте орфографией и синтаксисом;</li>
+        <li>Жгите!</li>
+    </ol>
+{%  endblock %}

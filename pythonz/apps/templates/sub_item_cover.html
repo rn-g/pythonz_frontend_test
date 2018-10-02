@@ -1,0 +1,8 @@
+{% load sitetree model_meta thumbs %}
+
+{% thumbs_get_thumb_url item.cover 100 131 item.realm as thumb_url %}
+{% if thumb_url %}
+    <img src="{{ thumb_url }}" class="img-thumbnail media-object {% if not nofade %}faded{% endif %}" alt="{{ item.title }}">
+{% else %}
+    <i class="img-thumbnail icon_entity fa fa-2x fa-{{ item.realm.icon }} {% if not nofade %}faded{% endif %}"></i>
+{% endif %}
