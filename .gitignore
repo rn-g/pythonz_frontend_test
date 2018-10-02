@@ -7,5 +7,5 @@
 .eggs
 __pycache__
 /pythonz/data/media/
-/pythonz/data/db/
+/pythonz/data/db/*.db
 /pythonz/settings/settings_production.py
