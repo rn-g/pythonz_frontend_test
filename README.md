@@ -7,7 +7,7 @@
 `git clone https://github.com/ruslankl029/pythonz_frontend_test.git`
 - Переходим в корневую папку проекта:
 
-`сd pythonz_frontend_test`
+`cd pythonz_frontend_test`
 - Создаем виртуальное окружение:
 
 `virtualenv -p /usr/bin/python3 venv/`

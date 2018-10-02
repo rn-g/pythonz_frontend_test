@@ -21,10 +21,10 @@ class Admin(object):
         await f_password1.send_keys(password)
         await f_password2.send_keys(password)
         save_button = await self.driver.get_element('input[name="_save"]')
-        await save_button.click() # send_keys(f'{keys.ENTER}')
+        await save_button.click()
         f_success_text = await self.driver.wait_for_element(10, 'li.success')
         success_text = await f_success_text.get_text()
-        assert 'успешно добавлен' in success_text and username in success_text
+        assert username in success_text
         if is_superuser:
             f_is_superuser = await self.driver.get_element('input#id_is_superuser')
             await f_is_superuser.click()
