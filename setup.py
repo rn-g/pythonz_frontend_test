@@ -6,12 +6,12 @@ import subprocess
 class InstallWrapper(install):
 
     def run(self):
-        subprocess.call('pip install -r pythonz/requirements.txt')
-        subprocess.call('python pythonz/manage.py migrate')
+        subprocess.call('pip install -r ./pythonz/requirements.txt')
+        subprocess.call('python ./pythonz/manage.py migrate')
         # add robot user to db to avoid error
-        subprocess.call('python tests/workaround.py')
+        subprocess.call('python ./tests/workaround.py')
         # create superuser
-        subprocess.call('python pythonz/manage.py shell -c "from django.contrib.auth import get_user_model; '
+        subprocess.call('python ./pythonz/manage.py shell -c "from django.contrib.auth import get_user_model; '
                         'User = get_user_model(); '
                         'User.objects.create_superuser(\'root\', \'admin@example.com\', \'123456\')'
                         'if len(User.objects.filter(username=\'root\')) == 0 else None"')
