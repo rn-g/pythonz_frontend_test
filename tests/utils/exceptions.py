@@ -1,3 +1,7 @@
+"""
+Исключения для тестов
+"""
+
 
 class EntityNotEditable(Exception):
     pass

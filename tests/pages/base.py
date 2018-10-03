@@ -5,6 +5,7 @@ from pages.locators import BasePageLocators as locators
 
 
 class WaitForPageChange(object):
+    """Класс для ожидания изменения страниц или ее элеметов"""
 
     def __init__(self, driver, timeout=10, element='html'):
         self.driver = driver
@@ -24,6 +25,7 @@ class WaitForPageChange(object):
 
 
 class BasePage(object):
+    """Базовый класс для объектов страниц"""
     CSS = 'css'
     XPATH = 'xpath'
 

@@ -3,6 +3,7 @@ import string
 
 
 class UserGenerator(object):
+    """Генератор сущности Пользователь"""
 
     @classmethod
     def generate(cls, is_superuser=False):

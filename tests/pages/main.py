@@ -5,6 +5,7 @@ from pages.locators import MainPageLocators
 
 
 class MainPage(BasePage):
+    """Объект для главной страницы сайта"""
 
     def __init__(self, driver):
         super().__init__(driver)

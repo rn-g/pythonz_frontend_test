@@ -1,3 +1,7 @@
+"""
+Вспомогательные функции для ассертов в тестах
+"""
+
 
 def dict_common_fields_equal(dict1, dict2):
     s = dict1.keys() & dict2.keys()

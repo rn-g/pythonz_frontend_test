@@ -1,6 +1,8 @@
+import asyncio
 
 
 class Admin(object):
+    """Объект для страниц администрирования"""
 
     def __init__(self, driver, username, password):
         self.current_page = None
@@ -20,6 +22,7 @@ class Admin(object):
         await f_username.send_keys(username)
         await f_password1.send_keys(password)
         await f_password2.send_keys(password)
+        await asyncio.sleep(self.driver.time_wait)
         save_button = await self.driver.get_element('input[name="_save"]')
         await save_button.click()
         f_success_text = await self.driver.wait_for_element(10, 'li.success')

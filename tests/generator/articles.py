@@ -3,6 +3,7 @@ import string
 
 
 class ArticleGenerator(object):
+    """Генератор сущности Статья"""
 
     @classmethod
     def generate(cls):

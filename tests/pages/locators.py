@@ -1,3 +1,8 @@
+"""
+Модуль содержит классы с константами локаторов страниц
+"""
+
+
 class BasePageLocators(object):
     USERNAME_LINK = 'ul.nav.navbar-right a'
     USERNAME_LINK_2 = 'ul.nav.navbar-right a[href="#"]'

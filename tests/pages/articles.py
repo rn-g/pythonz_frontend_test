@@ -6,6 +6,7 @@ from utils.exceptions import *
 
 
 class ArticlesPage(BasePage):
+    """Объект для страницы раздела статей"""
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -57,6 +58,7 @@ class ArticlesPage(BasePage):
 
 
 class ArticleViewPage(BasePage):
+    """Объект для страницы просмотра статьи"""
 
     def __init__(self, driver, id=None):
         super().__init__(driver)
@@ -122,6 +124,7 @@ class ArticleViewPage(BasePage):
 
 
 class ArticleEditPage(BasePage):
+    """Объект для страницы редактирования статьи"""
 
     def __init__(self, driver, id=None):
         super().__init__(driver)

@@ -25,10 +25,17 @@ def load_config(_file):
     return target
 
 
+def pytest_configure_node(node):
+    k = [0.2, 0.7, 1.3]
+    n = node.workerinput['workercount']
+    node_id = int(node.gateway.id.replace('gw', ''))
+    node.slaveinput['time_wait'] = k[node_id] if n <= 3 else 0
+
+
 def pytest_generate_tests(metafunc):
     if 'data' in metafunc.fixturenames:
         data = None
-        if metafunc.module.__name__ == 'articles':
+        if metafunc.module.__name__ == 'test_articles':
             data = [ArticleGenerator.generate() for x in range(2)]
         if data:
             metafunc.parametrize('data', [data])
@@ -49,6 +56,7 @@ def event_loop(request):
 
 @pytest.fixture(scope='session')
 async def session(request):
+    global time_wait
     config = load_config(request.config.getoption('--config-file'))
     if 'db_path' in config:
         temp_dir = tempfile.gettempdir()
@@ -69,6 +77,12 @@ async def session(request):
         browser,
         bind=config['base_url']
     )
+    # настройка времени ожидания для каждого потока
+    slaveinput = getattr(request.config, 'slaveinput', None)
+    if slaveinput is None:  # запуск в 1 поток
+        session.time_wait = 0
+    else:
+        session.time_wait = slaveinput['time_wait']
     try:
         yield session
     finally:
